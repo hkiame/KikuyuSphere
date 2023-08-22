@@ -1,0 +1,11 @@
+{
+  "name": "kikuyusphere",
+  "version": "0.0.1",
+  "description": "KikuyuSphere Language Learning Platform - Explore the Kikuyu language and culture through interactive lessons, real-time chat, and cultural immersion.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Henry Kiame",
+  "license": "MIT"
+}
