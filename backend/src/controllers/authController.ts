@@ -60,8 +60,10 @@ export const registerUser = expressAsyncHandler(
         message:
           "Registration successful. Please check your email to confirm your email address.",
       });
-    } catch (error) {
-      res.status(500).json({ error: "User registration failed." });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ error: "User registration failed.", msg: err.message });
     }
   }
 );
