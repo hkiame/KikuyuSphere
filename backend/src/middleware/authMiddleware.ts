@@ -42,7 +42,7 @@ export const authorizeUser = expressAsyncHandler(
           );
         }
 
-        req.user;
+        req.user = user;
         next();
       } catch (error) {
         res.status(401);
