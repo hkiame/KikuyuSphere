@@ -1,5 +1,6 @@
 import prisma from "../prisma/client";
 import { hashPassword, verifyPassword, generateToken } from "../utils/auth";
+import jwt from "jsonwebtoken";
 
 export const register = async (
   firstName: string,
@@ -31,11 +32,17 @@ export const register = async (
   return newUser;
 };
 
-export const login = async (email: string, password: string) => {
-  const user = await prisma.user.findUnique({ where: { email } });
+export const login = async (usernameOrEmail: string, password: string) => {
+  const user = await prisma.user.findFirst({
+    where: { OR: [{ username: usernameOrEmail }, { email: usernameOrEmail }] },
+  });
 
   if (!user || !verifyPassword(password, user.password)) {
-    throw new Error("Invalid credentials.");
+    throw new Error("Invalid username/email or password.");
+  }
+
+  if (!user.emailConfirmed) {
+    throw new Error("Please confirm your email before logging in.");
   }
 
   const token = generateToken(user.id);
@@ -47,4 +54,11 @@ export const login = async (email: string, password: string) => {
     email: user.email,
     token,
   };
+};
+
+export const generateEmailConfirmationToken = (userId: string) => {
+  const secret = process.env.JWT_EMAIL_SECRET;
+  const token = jwt.sign({ userId }, secret, { expiresIn: "24h" });
+
+  return token;
 };
