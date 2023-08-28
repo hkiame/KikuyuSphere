@@ -18,7 +18,7 @@ export const authorizeUser = expressAsyncHandler(
         const decode: any = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decode.userId;
 
-        req.user = await prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
           where: {
             id: userId,
           },
@@ -36,12 +36,17 @@ export const authorizeUser = expressAsyncHandler(
           },
         });
 
-        console.log(req.user);
+        if (!user.emailConfirmed) {
+          throw new Error(
+            "Please check your email to confirm your email address."
+          );
+        }
 
+        req.user;
         next();
       } catch (error) {
         res.status(401);
-        throw new Error("Not authorized");
+        throw new Error("Not authorized.");
       }
     }
 

@@ -11,66 +11,61 @@ import prisma from "../prisma/client";
 export const registerUser = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const { username, firstName, lastName, email, password } = req.body;
-    try {
-      await prisma.user.deleteMany();
-      // Register user
-      const newUser = await register(
-        firstName,
-        lastName,
-        username,
-        email,
-        password
-      );
 
-      if (!newUser) {
-        res.status(400);
-        throw new Error("User registration failed.");
-      }
+    // Register user
+    const newUser = await register(
+      firstName,
+      lastName,
+      username,
+      email,
+      password
+    );
 
-      const {
-        id,
-        username: registeredUsername,
-        firstName: registeredFirstName,
-        lastName: registeredLastName,
-        email: registeredEmail,
-      } = newUser;
-
-      // Generate token
-      const token = generateToken(id);
-
-      // Read email template asynchronously
-      const emailTemplate = await readEmailTemplate("emailConfirmation");
-
-      // email address confirmation token
-      const emailConfirmationToken = generateEmailConfirmationToken(id);
-
-      // Construct confirmation link
-      const confirmationLink = `${process.env.APP_URL}/confirm-email?token=${emailConfirmationToken}`;
-
-      // Replace placeholders with actual values
-      const emailContent = emailTemplate.replace(
-        "{{ confirmationLink }}",
-        confirmationLink
-      );
-
-      // Send confirmation email
-      await sendEmail(registeredEmail, "Confirm Your Email", emailContent);
-
-      // Respond with user data and token
-      res.status(201).json({
-        id,
-        firstName: registeredFirstName,
-        lastName: registeredLastName,
-        username: registeredUsername,
-        email: registeredEmail,
-        token,
-        message:
-          "Registration successful. Please check your email to confirm your email address.",
-      });
-    } catch (err) {
+    if (!newUser) {
       res.status(400);
       throw new Error("User registration failed.");
     }
+
+    const {
+      id,
+      username: registeredUsername,
+      firstName: registeredFirstName,
+      lastName: registeredLastName,
+      email: registeredEmail,
+    } = newUser;
+
+    // Generate token
+    const token = generateToken(id);
+
+    // Read email template asynchronously
+    const emailTemplate = await readEmailTemplate("emailConfirmation");
+
+    // email address confirmation token
+    const emailConfirmationToken = generateEmailConfirmationToken(id);
+
+    // Construct confirmation link
+    const confirmationLink = `${process.env.APP_URL}/confirm-email?token=${emailConfirmationToken}`;
+
+    // Replace placeholders with actual values
+    const emailContent = emailTemplate.replace(
+      "{{ confirmationLink }}",
+      confirmationLink
+    );
+
+    // Send confirmation email
+    await sendEmail(registeredEmail, "Confirm Your Email", emailContent);
+
+    // Respond with user data and token
+    res.status(201).json({
+      id,
+      firstName: registeredFirstName,
+      lastName: registeredLastName,
+      username: registeredUsername,
+      email: registeredEmail,
+      token,
+      message:
+        "Registration successful. Please check your email to confirm your email address.",
+    });
   }
 );
 
