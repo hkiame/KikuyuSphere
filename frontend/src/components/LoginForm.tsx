@@ -1,6 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { Link } from "react-router-dom";
 
 const LoginForm: React.FC = () => {
   const formik = useFormik({
@@ -71,6 +72,18 @@ const LoginForm: React.FC = () => {
           </button>
         </div>
       </form>
+      <p className="mt-3 text-muted">
+        Don't have an account yet?{" "}
+        <Link to="/register" className="text-muted">
+          Sign up here
+        </Link>
+      </p>
+      <p className="text-muted">
+        Forgot your password?{" "}
+        <Link to="/forgot-password" className="text-muted">
+          Reset it here
+        </Link>
+      </p>
     </div>
   );
 };
