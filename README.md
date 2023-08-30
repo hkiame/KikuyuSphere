@@ -77,4 +77,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Note:** The provided `.env.example` file is a work in progress and will be updated with the required variables.
+**Note:** The entire project is a work in progress, and we appreciate your interest and patience as we develop KikuyuSphere into a valuable resource for the Kikuyu community and enthusiasts worldwide.
