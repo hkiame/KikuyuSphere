@@ -1,8 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { registerUser, reset } from "../features/auth/authSlice";
+import { RootState, AppDispatch } from "../app/store";
+import LoadingComponent from "../components/LoadingComponent";
 
 const RegistrationForm: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { user, isLoggedIn, isLoading, isError, isSuccess, message } =
+    useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message, { autoClose: false });
+    }
+
+    if (isLoggedIn) {
+      navigate("/home");
+    }
+
+    if (isSuccess) {
+      toast.success(message, { autoClose: false });
+    }
+
+    dispatch(reset());
+  }, [user, isLoggedIn, isError, navigate, dispatch, message]);
+
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -41,10 +69,21 @@ const RegistrationForm: React.FC = () => {
     }),
     onSubmit: (values) => {
       console.log(values);
+      dispatch(registerUser(values));
     },
   });
+
+  if (isLoading) {
+    return <LoadingComponent />;
+  }
+
   return (
     <div>
+      <h2 className="mt-5 mb-3">Register</h2>
+      <p className="mb-4 lead">
+        Welcome to KikuyuSphere! Please fill out the form below to create your
+        account.
+      </p>
       <form onSubmit={formik.handleSubmit} className="">
         <div className="row mb-4">
           <div className="col">
@@ -129,7 +168,7 @@ const RegistrationForm: React.FC = () => {
         <div className="row mb-4">
           <div className="col">
             <input
-              type="text"
+              type="password"
               className={`form-control ${
                 formik.touched.password && formik.errors.password
                   ? "is-invalid"
@@ -149,7 +188,7 @@ const RegistrationForm: React.FC = () => {
           </div>
           <div className="col">
             <input
-              type="text"
+              type="password"
               className={`form-control ${
                 formik.touched.confirmPassword && formik.errors.confirmPassword
                   ? "is-invalid"

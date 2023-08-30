@@ -10,6 +10,7 @@ import prisma from "../prisma/client";
 
 export const registerUser = expressAsyncHandler(
   async (req: Request, res: Response) => {
+    // await prisma.user.deleteMany();
     const { username, firstName, lastName, email, password } = req.body;
 
     // Register user
@@ -72,7 +73,7 @@ export const registerUser = expressAsyncHandler(
 export const loginUser = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    const user = await login(email, password);
+    const user = await login(email, password, res);
 
     res.status(201).json(user);
   }

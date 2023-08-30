@@ -1,6 +1,7 @@
 import prisma from "../prisma/client";
 import { hashPassword, verifyPassword, generateToken } from "../utils/auth";
 import jwt from "jsonwebtoken";
+import { Response } from "express";
 
 export const register = async (
   firstName: string,
@@ -32,7 +33,11 @@ export const register = async (
   return newUser;
 };
 
-export const login = async (usernameOrEmail: string, password: string) => {
+export const login = async (
+  usernameOrEmail: string,
+  password: string,
+  res: Response
+) => {
   const user = await prisma.user.findFirst({
     where: { OR: [{ username: usernameOrEmail }, { email: usernameOrEmail }] },
   });
@@ -42,6 +47,7 @@ export const login = async (usernameOrEmail: string, password: string) => {
   }
 
   if (!user.emailConfirmed) {
+    res.status(401);
     throw new Error("Please confirm your email before logging in.");
   }
 

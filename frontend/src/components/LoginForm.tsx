@@ -1,9 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { RootState, AppDispatch } from "../app/store";
+import LoadingComponent from "../components/LoadingComponent";
+import { loginUser, reset } from "../features/auth/authSlice";
 
 const LoginForm: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { isLoggedIn, isLoading, isError, message } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message, { autoClose: false });
+    }
+
+    if (isLoggedIn) {
+      navigate("/home");
+    }
+
+    dispatch(reset());
+  }, [isLoggedIn, isError, navigate, dispatch, message]);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -23,8 +48,14 @@ const LoginForm: React.FC = () => {
     }),
     onSubmit: (values) => {
       console.log(values);
+      dispatch(loginUser(values));
     },
   });
+
+  if (isLoading) {
+    return <LoadingComponent />;
+  }
+
   return (
     <div>
       <form onSubmit={formik.handleSubmit} className="">
@@ -48,7 +79,7 @@ const LoginForm: React.FC = () => {
         </div>
         <div className="mb-4">
           <input
-            type="text"
+            type="password"
             className={`form-control ${
               formik.touched.password && formik.errors.password
                 ? "is-invalid"

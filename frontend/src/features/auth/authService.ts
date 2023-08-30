@@ -1,9 +1,20 @@
 import axios from "axios";
+import { LoginData, RegisterUserData } from "../../types/auth";
+const BASE_URL = "/api/auth";
 
-const BASE_URL = "/api/users/";
+export const registerUserAPI = async (userData: RegisterUserData) => {
+  const response = await axios.post(`${BASE_URL}/register`, userData);
 
-export const registerUserAPI = async (userData: User) => {
-  const response = await axios.post(BASE_URL, userData);
+  if (response.data) {
+    const data = JSON.stringify(response.data);
+    localStorage.setItem("user", data);
+  }
+
+  return response.data;
+};
+
+export const loginUserAPI = async (credentials: LoginData) => {
+  const response = await axios.post(`${BASE_URL}/login`, credentials);
 
   if (response.data) {
     const data = JSON.stringify(response.data);
