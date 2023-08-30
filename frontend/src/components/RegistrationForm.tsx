@@ -211,7 +211,7 @@ const RegistrationForm: React.FC = () => {
           </div>
         </div>
         <div className="d-grid">
-          <button type="submit" className="btn bg-light-beige">
+          <button type="submit" className="btn btn-primary">
             Register
           </button>
         </div>

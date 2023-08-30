@@ -1,3 +1,14 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.banner {
+  height: 450px;
+  background-size: cover;
+}
 .brown-orange {
   color: #b85a18;
 }
@@ -27,6 +38,75 @@
   box-shadow: 0 0 0 0.25rem rgba(95, 63, 10, 0.15);
 }
 
-.btn:hover {
+.ks-btn:hover {
   background-color: rgba(95, 63, 10, 0.3) !important;
+}
+
+.landing-page {
+  text-align: center;
+  padding: 60px 0;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.hero {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.features {
+  max-width: 1200px;
+  margin: 50px auto;
+}
+
+.feature {
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.feature:hover {
+  transform: translateY(-5px);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  color: #f39c12;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.btn-primary {
+  background-color: #f39c12;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #e88a0b;
+}
+
+.banner {
+  text-align: center;
+  background-color: #f4f4f4;
+  padding: 50px 0;
+}
+
+.banner img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
