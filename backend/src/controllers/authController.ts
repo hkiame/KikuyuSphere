@@ -10,7 +10,6 @@ import prisma from "../prisma/client";
 
 export const registerUser = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    // await prisma.user.deleteMany();
     const { username, firstName, lastName, email, password } = req.body;
 
     // Register user
